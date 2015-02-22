@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect, Http404
 from django.core.urlresolvers import reverse
 from account.models import ApiKey, ApiKeyForm
 from models import UserProfileForm, LDAPPassChangeForm
+from staff.models import GroupForm
 
 from django.views.decorators.debug import sensitive_post_parameters
 from django.contrib.auth.decorators import login_required
@@ -125,6 +126,17 @@ def ldap_password_change(request,
     return TemplateResponse(request, template_name, context,
                             current_app=current_app)
 
+
+# Auto create a group for oAuth user.
+@login_required
+def oauth_auto_create_user_group(request):
+    #Add user to her own group
+    if request.user.email and not any(g.name == request.user.email for g in request.user.groups.all()):
+        form = GroupForm({'name': request.user.email})
+        form.save()
+        request.user.groups.add(form.instance)
+        request.user.save()
+    return HttpResponseRedirect('/')
 
 class RatticSessionDeleteView(SessionDeleteView):
     def get_success_url(self):

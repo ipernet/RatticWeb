@@ -374,6 +374,7 @@ if GOAUTH2_ENABLED:
     )
 
     LOGIN_URL = RATTIC_ROOT_URL + 'account/login/google-oauth2/'
+    LOGIN_REDIRECT_URL = urljoin(RATTIC_ROOT_URL, 'account/autocreateusergroup')
     LOGIN_ERROR_URL = RATTIC_ROOT_URL + '/account/login-error/'
 
     SOCIAL_AUTH_RAISE_EXCEPTIONS = False
