@@ -628,7 +628,6 @@ var RATTIC = (function ($, ZeroClipboard) {
 
       // Apply callbacks
       if ( !text.hasClass('hide')) {
-        me.on('mouseleave', _hideCopyButton);
         text.on('mouseover', _showCopyButton);
         clip.on('mouseover', _showCopyButton);
       }
