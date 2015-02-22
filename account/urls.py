@@ -63,3 +63,8 @@ if settings.LDAP_ENABLED and settings.AUTH_LDAP_ALLOW_PASSWORD_CHANGE:
     urlpatterns += patterns('',
         url(r'^changepass/$', 'account.views.ldap_password_change', {}, name='password_change')
     )
+
+if settings.GOAUTH2_ENABLED:
+    urlpatterns += patterns('',
+        url(r'^autocreateusergroup/$', 'account.views.oauth_auto_create_user_group')
+    )
