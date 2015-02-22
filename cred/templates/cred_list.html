@@ -62,6 +62,7 @@
           <a href="{% url 'cred.views.list' filter value sortdir 'username' page %}">{% trans "User" %}</a>
         {% endif %}
       </th>
+	  <th>{% trans "Password" %}</th>
       <th>
         {% if sort == 'group' %}
           <a href="{% url 'cred.views.list' filter value revsortdir 'group' page %}">{% trans "Owner Group" %} {% if sortdir == 'ascending' %}<i class='icon-chevron-up'></i>{% else %}<i class='icon-chevron-down'></i>{% endif %}</a>
@@ -81,6 +82,10 @@
       <td class="credcheck"><input type="checkbox" name="credcheck" value="{{ c.id }}" class="list-checktarget cred-list-check" /></td>
       <td>{% cred_icon c.iconname %} <a href="{% url "cred.views.detail" c.id %}">{{ c.title|default:"(No Title)" }}</a></td>
       <td>{{ c.username }}</td>
+      <td class="rattic-copy-button">
+        <span data-cred-id="{{ c.id }}" class="password hide"></span>
+        <button class="btn btn-mini">{% trans "Copy" %}</button>
+      </td>
       <td>{% if c.group in groups.all %}<a href="{% url "cred.views.list" "group" c.group.id %}">{{ c.group.name }}</a>{% else %}{{ c.group.name }}{% endif %}</td>
       <td>
         {% for g in c.groups.all %}
