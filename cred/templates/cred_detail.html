@@ -55,7 +55,7 @@
       <button class="btn btn-mini btn-password-show-hide btn-pass-fetchcred" data-target="#password"></button>
   </th>
   <td id="passtd" class="rattic-copy-button">
-    <span id="password" class="passhidden">Fetching Password...</span>
+    <span id="password" data-cred-id="{{ cred.id }}" class="passhidden password">Fetching Password...</span>
     <button class="btn btn-mini" id="copyclipboard">{% trans "Copy" %}</button>
   </td>
 </tr>

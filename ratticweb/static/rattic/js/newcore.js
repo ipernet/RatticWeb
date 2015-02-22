@@ -320,7 +320,7 @@ var RATTIC = (function ($, ZeroClipboard) {
 
   function _passfetcher() {
     var me = $(this),
-      cred_id = me.data('cred_id');
+      cred_id = me.data('cred-id');
 
     my.api.getCred(cred_id, function (data) {
         me.text(data['password']);
@@ -330,7 +330,7 @@ var RATTIC = (function ($, ZeroClipboard) {
 
   function _passfetchersync() {
     var me = $(this),
-      cred_id = me.data('cred_id');
+      cred_id = me.data('cred-id');
     me.text(my.api.getCredWait(cred_id)['password']);
   }
 
@@ -627,9 +627,12 @@ var RATTIC = (function ($, ZeroClipboard) {
       text.data('copybutton', button);
 
       // Apply callbacks
-      me.on('mouseleave', _hideCopyButton);
-      text.on('mouseover', _showCopyButton);
-      clip.on('mouseover', _showCopyButton);
+      if ( !text.hasClass('hide')) {
+        me.on('mouseleave', _hideCopyButton);
+        text.on('mouseover', _showCopyButton);
+        clip.on('mouseover', _showCopyButton);
+      }
+
       clip.on('dataRequested', _copyButtonGetData);
     });
 
@@ -637,8 +640,7 @@ var RATTIC = (function ($, ZeroClipboard) {
   };
 
   /* Add data fetchers for the password spans */
-  my.controls.passwordFetcher = function (fetcher, id) {
-    fetcher.data('cred_id', id);
+  my.controls.passwordFetcher = function (fetcher) {
     fetcher.on('getdata', _passfetcher);
     fetcher.on('getdatasync', _passfetchersync);
   };
@@ -735,7 +737,7 @@ $(document).ready(function () {
   RATTIC.controls.spanShowHideButton($('.btn-password-show-hide'));
 
   // Enable the password fetcher
-  RATTIC.controls.passwordFetcher($('#password'), RATTIC.page.getCredId());
+  RATTIC.controls.passwordFetcher($('.password'));
 
   // Setup checkboxes that check all values
   RATTIC.controls.checkAll($('input.rattic-checkall[type=checkbox]'));
