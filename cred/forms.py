@@ -27,8 +27,9 @@ class CredForm(ModelForm):
 
         super(CredForm, self).__init__(*args, **kwargs)
 
-        # Limit the group options to groups that the user is in
-        self.fields['group'].queryset = Group.objects.filter(user=requser)
+        # Limit the group options to groups that the user is in, except for staff (create-for-all)
+        if not request.user.is_staff:
+            self.fields['group'].queryset = Group.objects.filter(user=requser)
 
         self.fields['group'].label = _('Owner Group')
         self.fields['groups'].label = _('Viewers Groups')
