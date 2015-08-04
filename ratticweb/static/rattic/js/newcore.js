@@ -608,16 +608,12 @@ var RATTIC = (function ($, ZeroClipboard) {
 
   /* Add copy buttons to table cells */
   my.controls.tableCopyButtons = function (cells) {
-    if (!FlashDetect.installed) {
-      return false;
-    }
-
     cells.each(function () {
       // Get the players
       var me = $(this),
         button = me.children('button'),
         text = me.children('span'),
-        clip = new ZeroClipboard(button);
+        clip = FlashDetect.installed ? new ZeroClipboard(button) : null;
 
       // Set data for callbacks
       button.data('copyfrom', text);
@@ -632,7 +628,21 @@ var RATTIC = (function ($, ZeroClipboard) {
         clip.on('mouseover', _showCopyButton);
       }
 
-      clip.on('dataRequested', _copyButtonGetData);
+        if(FlashDetect.installed) {
+            clip.on('dataRequested', _copyButtonGetData);
+        } else {
+            button.on('click', function(event) {
+                var fakeClient = {
+                    setText: function(text) {
+                        copyText(text);
+                    }
+                }
+
+                _copyButtonGetData.call(this, fakeClient);
+
+                event.preventDefault();
+            });
+        }
     });
 
     return true;
@@ -780,4 +790,35 @@ $(document).ready(function () {
   // Start collecting random numbers
   sjcl.random.startCollectors();
 });
+
+// https://gist.github.com/jonrohan/81085b119d16cdd7868a
+var copyNode, copyText, createNode;
+
+createNode = function(text) {
+    var node;
+    node = document.createElement('span');
+    node.style.position = 'absolute';
+    node.style.left = '-10000px';
+    node.textContent = text;
+    return node;
+};
+
+copyNode = function(node) {
+    var range, selection;
+    selection = getSelection();
+    selection.removeAllRanges();
+    range = document.createRange();
+    range.selectNodeContents(node);
+    selection.addRange(range);
+    document.execCommand('copy');
+    return selection.removeAllRanges();
+};
+
+copyText = function(text) {
+    var node;
+    node = createNode(text);
+    document.body.appendChild(node);
+    copyNode(node);
+    return document.body.removeChild(node);
+};
 
