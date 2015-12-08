@@ -1,6 +1,6 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
-from django.forms import ModelForm, SelectMultiple, Select, PasswordInput
+from django.forms import ModelForm, SelectMultiple, Select, PasswordInput, TextInput
 
 from models import Cred, Tag, Group
 from widgets import CredAttachmentInput, CredIconChooser
@@ -8,7 +8,7 @@ from widgets import CredAttachmentInput, CredIconChooser
 
 class ExportForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput(
-        attrs={'class': 'btn-password-visibility'}
+        attrs={'class': 'btn-password-visibility', 'autocomplete': 'off'}
     ))
 
 
@@ -52,9 +52,10 @@ class CredForm(ModelForm):
         widgets = {
             # Use chosen for the tag field
             'tags': SelectMultiple(attrs={'class': 'rattic-tag-selector'}),
+            'username': TextInput(attrs={'autocomplete': 'off'}),
             'group': Select(attrs={'class': 'rattic-group-selector'}),
             'groups': SelectMultiple(attrs={'class': 'rattic-group-selector'}),
-            'password': PasswordInput(render_value=True, attrs={'class': 'btn-password-generator btn-password-visibility'}),
+            'password': PasswordInput(render_value=True, attrs={'class': 'btn-password-generator btn-password-visibility', 'autocomplete': 'off'}),
             'attachment': CredAttachmentInput,
             'iconname': CredIconChooser,
         }
